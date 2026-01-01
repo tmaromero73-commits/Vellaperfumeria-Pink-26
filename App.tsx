@@ -25,13 +25,12 @@ type AppView = {
     payload?: any;
 };
 
-// WhatsApp Floating Button Component
 const WhatsAppFloat: React.FC = () => (
     <a
         href="https://wa.me/34661202616"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-8 right-8 z-[100] bg-[#25D366] text-white p-4 rounded-full shadow-[0_15px_35px_rgba(37,211,102,0.5)] hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center animate-bounce-subtle"
+        className="fixed bottom-8 right-8 z-[100] bg-[#25D366] text-white p-4 rounded-full shadow-[0_15px_35px_rgba(37,211,102,0.5)] hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center animate-bounce-subtle border-2 border-white/20"
         aria-label="WhatsApp Soporte"
     >
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
@@ -53,22 +52,18 @@ const App: React.FC = () => {
             if (storedCart) {
                 setCartItems(JSON.parse(storedCart));
             }
-        } catch (error) {
-            console.error("Failed to load cart", error);
-        }
+        } catch (e) {}
     }, []);
 
     useEffect(() => {
         try {
             localStorage.setItem('vellaperfumeria_cart', JSON.stringify(cartItems));
-        } catch (error) {
-            console.error("Failed to save cart", error);
-        }
+        } catch (e) {}
     }, [cartItems]);
     
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, [view]);
+    }, [view.current]);
 
     const handleNavigate = useCallback((newView: View, payload?: any) => {
         setView({ current: newView, payload });
@@ -92,51 +87,36 @@ const App: React.FC = () => {
         } else {
             setCartItems([...cartItems, { id: cartItemId, product, quantity: 1, selectedVariant }]);
         }
-        
         setIsCartOpen(true);
-    };
-    
-    const handleQuickAddToCart = (product: Product, buttonElement: HTMLButtonElement | null, selectedVariant: Record<string, string> | null) => {
-        handleAddToCart(product, buttonElement, selectedVariant);
-        if (!isCartOpen) setIsCartOpen(true);
-    };
-
-    const handleUpdateQuantity = (cartItemId: string, newQuantity: number) => {
-        if (newQuantity <= 0) {
-            setCartItems(cartItems.filter(item => item.id !== cartItemId));
-        } else {
-            setCartItems(cartItems.map(item =>
-                item.id === cartItemId ? { ...item, quantity: newQuantity } : item
-            ));
-        }
-    };
-
-    const handleRemoveItem = (cartItemId: string) => {
-        setCartItems(cartItems.filter(item => item.id !== cartItemId));
     };
 
     const renderContent = () => {
-        switch (view.current) {
-            case 'home':
-                return <ProductList onNavigate={handleNavigate} onProductSelect={handleProductSelect} onAddToCart={handleAddToCart} onQuickAddToCart={handleQuickAddToCart} currency={currency} onQuickView={setQuickViewProduct} />;
-            case 'products':
-                return <ShopPage initialCategory={view.payload || 'all'} currency={currency} onAddToCart={handleAddToCart} onQuickAddToCart={handleQuickAddToCart} onProductSelect={handleProductSelect} onQuickView={setQuickViewProduct} />;
-            case 'productDetail':
-                return <ProductDetailPage product={view.payload} currency={currency} onAddToCart={handleAddToCart} onQuickAddToCart={handleQuickAddToCart} onProductSelect={handleProductSelect} onQuickView={setQuickViewProduct} />;
-            case 'ofertas':
-                return <OfertasPage currency={currency} onAddToCart={handleAddToCart} onQuickAddToCart={handleQuickAddToCart} onProductSelect={handleProductSelect} onQuickView={setQuickViewProduct} />;
-            case 'ia':
-                return <AsistenteIAPage />;
-            case 'catalog':
-                return <CatalogPage onAddToCart={handleAddToCart} onQuickAddToCart={handleQuickAddToCart} onProductSelect={handleProductSelect} onQuickView={setQuickViewProduct} currency={currency} />;
-            case 'blog':
-                 return <BlogPage posts={blogPosts} onSelectPost={(p) => handleNavigate('blogPost', p)} />;
-            case 'blogPost':
-                 return <BlogPostPage post={view.payload} allPosts={blogPosts} onSelectPost={(p) => handleNavigate('blogPost', p)} onBack={() => handleNavigate('blog')} />;
-            case 'checkout':
-                return <CheckoutPage cartItems={cartItems} currency={currency} onClearCart={() => setCartItems([])} onNavigate={handleNavigate} />;
-            default:
-                return <ProductList onNavigate={handleNavigate} onProductSelect={handleProductSelect} onAddToCart={handleAddToCart} onQuickAddToCart={handleQuickAddToCart} currency={currency} onQuickView={setQuickViewProduct} />;
+        // Garantizamos que siempre se renderice algo para evitar pantallas grises
+        try {
+            switch (view.current) {
+                case 'home':
+                    return <ProductList onNavigate={handleNavigate} onProductSelect={handleProductSelect} onAddToCart={handleAddToCart} onQuickAddToCart={handleAddToCart} currency={currency} onQuickView={setQuickViewProduct} />;
+                case 'products':
+                    return <ShopPage initialCategory={view.payload || 'all'} currency={currency} onAddToCart={handleAddToCart} onQuickAddToCart={handleAddToCart} onProductSelect={handleProductSelect} onQuickView={setQuickViewProduct} />;
+                case 'productDetail':
+                    return <ProductDetailPage product={view.payload} currency={currency} onAddToCart={handleAddToCart} onQuickAddToCart={handleAddToCart} onProductSelect={handleProductSelect} onQuickView={setQuickViewProduct} />;
+                case 'ofertas':
+                    return <OfertasPage currency={currency} onAddToCart={handleAddToCart} onQuickAddToCart={handleAddToCart} onProductSelect={handleProductSelect} onQuickView={setQuickViewProduct} />;
+                case 'ia':
+                    return <AsistenteIAPage />;
+                case 'catalog':
+                    return <CatalogPage onAddToCart={handleAddToCart} onQuickAddToCart={handleAddToCart} onProductSelect={handleProductSelect} onQuickView={setQuickViewProduct} currency={currency} />;
+                case 'blog':
+                     return <BlogPage posts={blogPosts} onSelectPost={(p) => handleNavigate('blogPost', p)} />;
+                case 'blogPost':
+                     return <BlogPostPage post={view.payload} allPosts={blogPosts} onSelectPost={(p) => handleNavigate('blogPost', p)} onBack={() => handleNavigate('blog')} />;
+                case 'checkout':
+                    return <CheckoutPage cartItems={cartItems} currency={currency} onClearCart={() => setCartItems([])} onNavigate={handleNavigate} />;
+                default:
+                    return <ProductList onNavigate={handleNavigate} onProductSelect={handleProductSelect} onAddToCart={handleAddToCart} onQuickAddToCart={handleAddToCart} currency={currency} onQuickView={setQuickViewProduct} />;
+            }
+        } catch (e) {
+            return <ProductList onNavigate={handleNavigate} onProductSelect={handleProductSelect} onAddToCart={handleAddToCart} onQuickAddToCart={handleAddToCart} currency={currency} onQuickView={setQuickViewProduct} />;
         }
     };
     
@@ -159,8 +139,11 @@ const App: React.FC = () => {
                 onClose={() => setIsCartOpen(false)}
                 cartItems={cartItems}
                 currency={currency}
-                onUpdateQuantity={handleUpdateQuantity}
-                onRemoveItem={handleRemoveItem}
+                onUpdateQuantity={(id, q) => {
+                    if (q <= 0) setCartItems(cartItems.filter(i => i.id !== id));
+                    else setCartItems(cartItems.map(i => i.id === id ? {...i, quantity: q} : i));
+                }}
+                onRemoveItem={(id) => setCartItems(cartItems.filter(i => i.id !== id))}
                 onCheckout={() => { setIsCartOpen(false); handleNavigate('checkout'); }}
                 isCheckingOut={false}
                 checkoutError={null}
@@ -217,7 +200,6 @@ const App: React.FC = () => {
                 }
                 .animate-bounce-subtle { animation: bounce-subtle 2.5s infinite ease-in-out; }
                 
-                /* Fade in animation for view changes */
                 main > div {
                     animation: fadeIn 0.4s ease-out forwards;
                 }
