@@ -8,19 +8,25 @@ interface HeroCarouselProps {
 
 const slides = [
     {
-        // Imagen solicitada: Mujer rubia con sombras de ventana (Estilismo & Color)
+        imageUrl: 'https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?auto=format&fit=crop&q=80&w=1600', 
+        title: 'Beauty AI Expert 2026',
+        subtitle: 'Descubre el maquillaje perfecto analizado por nuestra Inteligencia Artificial. Prueba el probador virtual con tu móvil.',
+        buttonText: 'PROBAR ASISTENTE IA',
+        view: 'ia' as View,
+    },
+    {
         imageUrl: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=1600', 
-        title: 'Estilismo & Color 2026',
-        subtitle: 'Captura la esencia de la belleza pura con Oriflame. Únete a nuestro círculo exclusivo y ahorra un 15% hoy.',
-        buttonText: 'VER COLECCIÓN',
+        title: 'Maquillaje de Estilismo',
+        subtitle: 'Domina las tendencias de Oriflame 2026. Únete al círculo exclusivo de Vellaperfumeria y ahorra un 15% en cada compra.',
+        buttonText: 'VER MAQUILLAJE',
         view: 'products' as View,
     },
     {
-        imageUrl: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&q=80&w=1600',
-        title: 'Oriflame Experience',
-        subtitle: 'Tecnología sueca para el cuidado de tu piel. Maquillaje profesional y fragancias que cuentan historias.',
-        buttonText: 'EXPLORAR TIENDA',
-        view: 'products' as View,
+        imageUrl: 'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&q=80&w=1600', 
+        title: 'Caja Regalo Oro',
+        subtitle: 'El detalle perfecto: Milk & Honey Gold en sets exclusivos. Bolsa de oferta y descuento directo para clientes VIP.',
+        buttonText: 'IDEAS DE REGALO',
+        view: 'ofertas' as View,
     }
 ];
 
@@ -32,42 +38,41 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onNavigate }) => {
     }, []);
 
     useEffect(() => {
-        const slideInterval = setInterval(nextSlide, 7000);
+        const slideInterval = setInterval(nextSlide, 9000);
         return () => clearInterval(slideInterval);
     }, [nextSlide]);
     
     return (
-        <div className="w-full h-[70vh] md:h-[85vh] relative group overflow-hidden bg-white">
+        <div className="w-full h-[80vh] md:h-[95vh] relative group overflow-hidden bg-white">
             {slides.map((slide, index) => (
                 <div
                     key={index}
                     className={`absolute inset-0 w-full h-full bg-cover bg-center transition-all duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105'}`}
                     style={{ backgroundImage: `url(${slide.imageUrl})` }}
                 >
-                    {/* Overlay Suave */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/60 via-white/10 to-transparent flex items-center">
-                        <div className="container mx-auto px-6 md:px-16">
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/20 to-transparent flex items-center">
+                        <div className="container mx-auto px-6 md:px-24">
                             <div className="max-w-4xl">
-                                <span className="bg-black text-[#f78df6] px-5 py-2 font-black text-[10px] uppercase tracking-[0.5em] mb-6 inline-block shadow-2xl animate-pop">
-                                    VELLAPERFUMERIA PREMIUM
+                                <span className="bg-black text-[#f78df6] px-6 py-2.5 font-black text-[11px] uppercase tracking-[0.5em] mb-10 inline-block shadow-2xl animate-pop">
+                                    Vellaperfumeria Store 2026
                                 </span>
-                                <h2 className="text-6xl md:text-[9rem] font-black text-black uppercase tracking-tighter mb-4 leading-[0.8] italic select-none">
+                                <h2 className="text-7xl md:text-[10.5rem] font-black text-black uppercase tracking-tighter mb-8 leading-[0.85] italic select-none">
                                     {slide.title}
                                 </h2>
-                                <p className="text-lg md:text-3xl font-bold text-gray-800 mb-10 uppercase tracking-[0.15em] max-w-2xl leading-tight">
+                                <p className="text-2xl md:text-3xl font-bold text-gray-900 mb-14 uppercase tracking-[0.1em] max-w-2xl leading-tight">
                                     {slide.subtitle}
                                 </p>
-                                <div className="flex flex-col sm:flex-row gap-5">
+                                <div className="flex flex-col sm:flex-row gap-8">
                                     <button
                                         onClick={() => onNavigate(slide.view)}
-                                        className="bg-black text-white font-black py-5 px-14 rounded-full shadow-[0_30px_60px_rgba(0,0,0,0.3)] hover:bg-[#f78df6] hover:text-black transition-all transform hover:scale-105 active:scale-95 uppercase tracking-[0.2em] text-[12px] border-2 border-black"
+                                        className="bg-black text-white font-black py-7 px-20 rounded-full shadow-[0_40px_80px_rgba(0,0,0,0.4)] hover:bg-[#f78df6] hover:text-black transition-all transform hover:scale-105 active:scale-95 uppercase tracking-[0.3em] text-[13px] border-2 border-black"
                                     >
                                         {slide.buttonText}
                                     </button>
-                                    <div className="hidden sm:flex items-center px-8 py-4 border-2 border-black/5 rounded-full bg-white/40 backdrop-blur-xl shadow-lg">
-                                        <span className="text-black font-black text-[10px] uppercase tracking-[0.35em] flex items-center gap-3">
-                                            <span className="w-2.5 h-2.5 bg-[#f78df6] rounded-full animate-pulse"></span>
-                                            OFERTA CLIENTE: -15% DTO.
+                                    <div className="hidden sm:flex items-center px-12 py-5 border-2 border-black/10 rounded-full bg-white/40 backdrop-blur-2xl shadow-2xl">
+                                        <span className="text-black font-black text-[11px] uppercase tracking-[0.4em] flex items-center gap-4">
+                                            <span className="w-3 h-3 bg-[#f78df6] rounded-full animate-pulse"></span>
+                                            TIENDA ONLINE: -15% DTO. VIP
                                         </span>
                                     </div>
                                 </div>
@@ -77,12 +82,12 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ onNavigate }) => {
                 </div>
             ))}
             
-            <div className="absolute bottom-12 left-16 hidden md:flex gap-4 z-20">
+            <div className="absolute bottom-20 left-24 hidden md:flex gap-8 z-20">
                 {slides.map((_, i) => (
                     <button 
                         key={i} 
                         onClick={() => setCurrentIndex(i)} 
-                        className={`h-[4px] transition-all duration-700 rounded-full ${i === currentIndex ? 'w-32 bg-black' : 'w-10 bg-black/20 hover:bg-black/40'}`}
+                        className={`h-[5px] transition-all duration-700 rounded-full ${i === currentIndex ? 'w-48 bg-black' : 'w-16 bg-black/20 hover:bg-black/40'}`}
                     ></button>
                 ))}
             </div>

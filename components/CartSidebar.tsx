@@ -1,5 +1,4 @@
 
-
 import React, { useEffect, useMemo, useRef } from 'react';
 import type { CartItem, View } from './types';
 import type { Currency } from './currency';
@@ -19,10 +18,9 @@ interface CartSidebarProps {
 }
 
 const FREE_SHIPPING_THRESHOLD = 35;
-const DISCOUNT_THRESHOLD = 35; // Same threshold for discount
-const DISCOUNT_PERCENTAGE = 0.15; // 15%
+const DISCOUNT_THRESHOLD = 35;
+const DISCOUNT_PERCENTAGE = 0.15;
 const SHIPPING_COST = 6.00;
-
 
 const CloseIcon = () => (
     <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -36,226 +34,124 @@ const TrashIcon = () => (
     </svg>
 );
 
+const WhatsAppIcon = () => (
+    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 4.315 1.919 6.066l-1.475 5.422 5.571-1.469z"/></svg>
+);
+
 const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose, cartItems, currency, onUpdateQuantity, onRemoveItem, onCheckout, isCheckingOut, checkoutError, onNavigate }) => {
     const sidebarRef = useRef<HTMLDivElement>(null);
     
-    // Close sidebar on "Escape" key press
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                onClose();
-            }
+            if (event.key === 'Escape') onClose();
         };
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [onClose]);
-
-    // Trap focus within the sidebar when open for accessibility
-    useEffect(() => {
-        if (!isOpen || !sidebarRef.current) return;
-
-        const focusableElements = sidebarRef.current.querySelectorAll<HTMLElement>(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        const firstElement = focusableElements[0];
-        const lastElement = focusableElements[focusableElements.length - 1];
-
-        const handleTabKeyPress = (event: KeyboardEvent) => {
-            if (event.key === 'Tab') {
-                if (event.shiftKey) { // Shift + Tab
-                    if (document.activeElement === firstElement) {
-                        lastElement.focus();
-                        event.preventDefault();
-                    }
-                } else { // Tab
-                    if (document.activeElement === lastElement) {
-                        firstElement.focus();
-                        event.preventDefault();
-                    }
-                }
-            }
-        };
-
-        firstElement?.focus();
-        sidebarRef.current.addEventListener('keydown', handleTabKeyPress);
-        return () => sidebarRef.current?.removeEventListener('keydown', handleTabKeyPress);
-
-    }, [isOpen]);
 
     const subtotal = useMemo(() => {
         return cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
     }, [cartItems]);
 
     const discountAmount = useMemo(() => {
-        if (subtotal >= DISCOUNT_THRESHOLD) {
-            return subtotal * DISCOUNT_PERCENTAGE;
-        }
-        return 0;
+        return subtotal >= DISCOUNT_THRESHOLD ? subtotal * DISCOUNT_PERCENTAGE : 0;
     }, [subtotal]);
 
-    const totalBeautyPoints = useMemo(() => {
-        return cartItems.reduce((total, item) => {
-            const points = item.product.beautyPoints || 0;
-            return total + (points * item.quantity);
-        }, 0);
-    }, [cartItems]);
-
-    const hasShippingSaver = useMemo(() => {
-        return cartItems.some(item => item.product.isShippingSaver);
-    }, [cartItems]);
-
     const shippingCost = useMemo(() => {
-        if (hasShippingSaver || subtotal >= FREE_SHIPPING_THRESHOLD) {
-            return 0;
-        }
-        return SHIPPING_COST;
-    }, [subtotal, hasShippingSaver]);
+        const hasShippingSaver = cartItems.some(item => item.product.isShippingSaver);
+        return (hasShippingSaver || subtotal >= FREE_SHIPPING_THRESHOLD) ? 0 : SHIPPING_COST;
+    }, [subtotal, cartItems]);
 
     const total = subtotal - discountAmount + shippingCost;
-    const amountForFreeShipping = FREE_SHIPPING_THRESHOLD - subtotal;
+
+    const handleWhatsAppOrder = () => {
+        const phone = "34661202616";
+        let message = "¡Hola! Quiero confirmar este pedido:%0A%0A";
+        cartItems.forEach(item => {
+            message += `• ${item.product.name} (x${item.quantity}) - ${formatCurrency(item.product.price * item.quantity, currency)}%0A`;
+        });
+        message += `%0A*Subtotal:* ${formatCurrency(subtotal, currency)}`;
+        if (discountAmount > 0) message += `%0A*Descuento (15%):* -${formatCurrency(discountAmount, currency)}`;
+        message += `%0A*Envío:* ${shippingCost === 0 ? 'Gratis' : formatCurrency(shippingCost, currency)}`;
+        message += `%0A*TOTAL:* ${formatCurrency(total, currency)}`;
+        message += `%0A%0APor favor, dime los pasos para completar el envío.`;
+
+        window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+    };
 
     return (
-        <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="cart-heading"
-            className={`fixed inset-0 z-40 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        >
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose} aria-hidden="true" />
-
-            {/* Sidebar */}
-            <div
-                ref={sidebarRef}
-                className={`fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-xl flex flex-col transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
-            >
-                {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b flex-shrink-0">
-                    <h2 id="cart-heading" className="text-xl font-bold tracking-wide">Tu Carrito</h2>
-                    <button onClick={onClose} className="p-1 rounded-full hover:bg-gray-100" aria-label="Cerrar carrito">
-                        <CloseIcon />
-                    </button>
+        <div className={`fixed inset-0 z-[200] transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+            <div ref={sidebarRef} className={`fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col transition-transform duration-500 ease-expo ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                <div className="flex items-center justify-between p-6 border-b">
+                    <h2 className="text-xl font-black uppercase tracking-tighter">Mi Carrito</h2>
+                    <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-100"><CloseIcon /></button>
                 </div>
 
-                {/* Cart Content */}
                 {cartItems.length > 0 ? (
                     <div className="flex-grow flex flex-col overflow-hidden">
-                        <div className="flex-grow overflow-y-auto p-4 space-y-4">
+                        <div className="flex-grow overflow-y-auto p-6 space-y-6">
                             {cartItems.map(item => (
-                                <div key={item.id} className="flex gap-4 items-start">
-                                    <img src={item.product.imageUrl} alt={item.product.name} className="w-24 h-24 object-contain rounded-md border p-1" />
-                                    <div className="flex-grow flex flex-col">
-                                        <h3 className="font-semibold text-sm leading-tight">{item.product.name}</h3>
-                                        {item.selectedVariant && (
-                                            <p className="text-xs text-gray-500 mt-1">
-                                                {Object.entries(item.selectedVariant).map(([key, value]) => `${key}: ${value}`).join(', ')}
-                                            </p>
-                                        )}
-                                        <div className="flex items-center justify-between mt-2">
-                                             <p className="font-bold text-base">{formatCurrency(item.product.price * item.quantity, currency)}</p>
-                                             <button onClick={() => onRemoveItem(item.id)} className="text-gray-400 hover:text-red-600 p-1" aria-label={`Eliminar ${item.product.name}`}>
-                                                <TrashIcon />
-                                            </button>
-                                        </div>
-                                        <div className="flex items-center border rounded-md w-fit mt-2">
-                                            <button onClick={() => onUpdateQuantity(item.id, item.quantity - 1)} className="px-3 py-1 font-semibold text-lg" aria-label="Reducir cantidad">-</button>
-                                            <span className="px-3 text-sm font-medium">{item.quantity}</span>
-                                            <button onClick={() => onUpdateQuantity(item.id, item.quantity + 1)} className="px-3 py-1 font-semibold text-lg" aria-label="Aumentar cantidad">+</button>
+                                <div key={item.id} className="flex gap-4 items-center bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                                    <img src={item.product.imageUrl} alt={item.product.name} className="w-20 h-20 object-contain mix-blend-multiply" />
+                                    <div className="flex-grow">
+                                        <h3 className="font-bold text-sm leading-tight line-clamp-2">{item.product.name}</h3>
+                                        <div className="flex items-center justify-between mt-3">
+                                            <p className="font-black text-black">{formatCurrency(item.product.price * item.quantity, currency)}</p>
+                                            <div className="flex items-center bg-white border rounded-lg">
+                                                <button onClick={() => onUpdateQuantity(item.id, item.quantity - 1)} className="px-3 py-1 font-bold">-</button>
+                                                <span className="px-2 text-xs font-black">{item.quantity}</span>
+                                                <button onClick={() => onUpdateQuantity(item.id, item.quantity + 1)} className="px-3 py-1 font-bold">+</button>
+                                            </div>
                                         </div>
                                     </div>
+                                    <button onClick={() => onRemoveItem(item.id)} className="text-gray-300 hover:text-red-500 transition-colors"><TrashIcon /></button>
                                 </div>
                             ))}
                         </div>
 
-                        <div className="p-4 border-t bg-gray-50 space-y-4 flex-shrink-0">
-                             {discountAmount > 0 ? (
-                                <p className="text-center text-sm font-semibold text-green-600 p-2 bg-green-50 rounded-md border border-green-200">
-                                    ¡Felicidades! Se ha aplicado un <b>15% de descuento</b> a tu compra.
-                                </p>
-                            ) : amountForFreeShipping > 0 ? (
-                                <div className="text-center text-sm">
-                                    <p>Te faltan <span className="font-bold">{formatCurrency(amountForFreeShipping, currency, { decimals: 2 })}</span> para el envío <b>GRATIS</b> y un <b>15% de descuento</b>.</p>
-                                    <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-                                        <div className="bg-brand-purple-dark h-2 rounded-full" style={{ width: `${Math.min((subtotal / FREE_SHIPPING_THRESHOLD) * 100, 100)}%` }}></div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <p className="text-center text-sm font-semibold text-green-600 p-2 bg-green-50 rounded-md border border-green-200">¡Felicidades! Tienes envío GRATIS.</p>
-                            )}
-                            
-                            {totalBeautyPoints > 0 && (
-                                <div className="flex justify-center items-center gap-2 text-black font-semibold p-2 bg-brand-purple/20 rounded-md border border-brand-purple/50">
-                                    <span>✨</span>
-                                    <span>¡Conseguirás <b>{totalBeautyPoints} Puntos Beauty</b> con esta compra!</span>
-                                </div>
-                            )}
-
-                            <div className="space-y-1 text-base">
+                        <div className="p-8 border-t bg-gray-50 space-y-4">
+                            <div className="space-y-2 text-sm">
                                 <div className="flex justify-between">
-                                    <span className="text-gray-700">Subtotal</span>
-                                    <span className="font-semibold">{formatCurrency(subtotal, currency)}</span>
+                                    <span className="text-gray-500 font-bold uppercase tracking-widest text-[10px]">Subtotal</span>
+                                    <span className="font-black">{formatCurrency(subtotal, currency)}</span>
                                 </div>
                                 {discountAmount > 0 && (
-                                     <div className="flex justify-between text-green-600">
-                                        <span className="font-semibold">Descuento (15%)</span>
-                                        <span className="font-semibold">-{formatCurrency(discountAmount, currency)}</span>
+                                    <div className="flex justify-between text-[#f78df6]">
+                                        <span className="font-bold uppercase tracking-widest text-[10px]">Descuento VIP (15%)</span>
+                                        <span className="font-black">-{formatCurrency(discountAmount, currency)}</span>
                                     </div>
                                 )}
                                 <div className="flex justify-between">
-                                    <span className="text-gray-700">Envío</span>
-                                    <span className="font-semibold">{shippingCost === 0 ? 'Gratis' : formatCurrency(shippingCost, currency)}</span>
+                                    <span className="text-gray-500 font-bold uppercase tracking-widest text-[10px]">Envío</span>
+                                    <span className="font-black">{shippingCost === 0 ? 'GRATIS' : formatCurrency(shippingCost, currency)}</span>
                                 </div>
                             </div>
-                            <div className="flex justify-between font-bold text-xl border-t pt-3 mt-2">
-                                <span>Total</span>
+                            <div className="flex justify-between font-black text-2xl border-t pt-4">
+                                <span className="uppercase tracking-tighter">Total</span>
                                 <span>{formatCurrency(total, currency)}</span>
                             </div>
-                            <div className="mt-4 grid grid-cols-1 gap-3">
-                                {checkoutError && (
-                                    <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 rounded-md text-sm" role="alert">
-                                        <p className="font-bold">Error al procesar</p>
-                                        <p>{checkoutError}</p>
-                                    </div>
-                                )}
-                                <button
-                                    onClick={onCheckout}
-                                    disabled={isCheckingOut || cartItems.length === 0}
-                                    className="w-full text-center bg-brand-purple text-brand-primary font-bold py-3 px-4 rounded-lg hover:bg-brand-purple-dark transition-colors flex justify-center items-center disabled:opacity-70 disabled:cursor-wait"
-                                >
-                                     {isCheckingOut ? (
-                                        <>
-                                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-brand-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                            </svg>
-                                            Procesando...
-                                        </>
-                                    ) : 'Finalizar Compra'}
+                            
+                            <div className="pt-4 space-y-3">
+                                <button onClick={onCheckout} className="w-full bg-black text-white font-black py-5 rounded-2xl hover:bg-[#f78df6] hover:text-black transition-all transform active:scale-95 uppercase tracking-widest text-[11px] shadow-xl">
+                                    Pagar con Tarjeta
                                 </button>
-                                <button
-                                    onClick={onClose}
-                                    className="w-full bg-transparent text-brand-primary font-semibold py-3 px-4 rounded-lg hover:bg-gray-100 transition-colors"
-                                >
-                                    Seguir Comprando
+                                <button onClick={handleWhatsAppOrder} className="w-full bg-green-500 text-white font-black py-5 rounded-2xl hover:bg-green-600 transition-all flex items-center justify-center gap-3 uppercase tracking-widest text-[11px] shadow-xl">
+                                    <WhatsAppIcon />
+                                    Pedir por WhatsApp
                                 </button>
                             </div>
                         </div>
                     </div>
                 ) : (
-                    <div className="flex-grow flex flex-col items-center justify-center text-center p-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-20 w-20 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                        <h3 className="text-xl font-semibold text-gray-800">Tu carrito está vacío</h3>
-                        <p className="text-gray-500 mt-2">Parece que aún no has añadido nada.</p>
-                        <button
-                            onClick={() => {
-                                onClose();
-                                onNavigate('products', 'all');
-                            }}
-                            className="mt-6 bg-brand-purple text-brand-primary font-semibold py-2 px-8 rounded-lg hover:bg-brand-purple-dark transition-colors"
-                        >
-                            Seguir comprando
+                    <div className="flex-grow flex flex-col items-center justify-center p-12 text-center">
+                        <div className="bg-gray-100 p-8 rounded-full mb-6">
+                            <svg className="w-12 h-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                        </div>
+                        <h3 className="text-xl font-black uppercase tracking-tighter mb-2">Tu bolsa está vacía</h3>
+                        <p className="text-gray-400 text-sm mb-8 font-medium">¿A qué esperas para conseguir tu 15% de descuento?</p>
+                        <button onClick={() => { onClose(); onNavigate('products', 'all'); }} className="bg-black text-white font-black py-4 px-10 rounded-full hover:bg-[#f78df6] hover:text-black transition-all uppercase tracking-widest text-[10px]">
+                            Ir a la Tienda
                         </button>
                     </div>
                 )}

@@ -34,7 +34,7 @@ const NavLink: React.FC<{
     onMouseEnter?: () => void,
     onMouseLeave?: () => void
 }> = ({ onClick, children, className, onMouseEnter, onMouseLeave }) => {
-    const defaultClass = "text-white hover:text-[#f78df6] transition-all duration-300 uppercase tracking-[0.2em] text-[11px] font-black py-5 px-6 flex items-center h-full relative group";
+    const defaultClass = "text-white hover:text-[#f78df6] transition-all duration-300 uppercase tracking-[0.3em] text-[10px] font-black py-6 px-8 flex items-center h-full relative group whitespace-nowrap";
     return (
         <button 
             onClick={onClick} 
@@ -43,7 +43,7 @@ const NavLink: React.FC<{
             onMouseLeave={onMouseLeave}
         >
             <span className="relative z-10">{children}</span>
-            <span className="absolute bottom-0 left-0 w-0 h-1 bg-[#f78df6] transition-all duration-300 group-hover:w-full"></span>
+            <span className="absolute bottom-0 left-0 w-0 h-1.5 bg-[#f78df6] transition-all duration-300 group-hover:w-full"></span>
         </button>
     );
 };
@@ -76,18 +76,19 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
     }, []);
 
     const categories = [
-        { key: 'perfume', name: 'Fragancias' },
-        { key: 'skincare', name: 'Cuidado Facial' },
-        { key: 'makeup', name: 'Maquillaje' },
-        { key: 'wellness', name: 'Wellness' },
+        { key: 'makeup', name: 'Maquillaje Profesional' },
+        { key: 'skincare', name: 'Cuidado Facial 2026' },
+        { key: 'perfume', name: 'Fragancias de Autor' },
+        { key: 'personal-care', name: 'Cuerpo & Baño' },
+        { key: 'wellness', name: 'Wellness by Oriflame' },
     ];
 
     return (
-        <header className="sticky top-0 z-[100] flex flex-col w-full shadow-lg">
-            {/* Barra de Anuncios y Social - Full Width */}
-            <div className="bg-black text-white py-2.5 text-[10px] font-black tracking-[0.2em] uppercase border-b border-white/10">
+        <header className="sticky top-0 z-[100] flex flex-col w-full shadow-2xl">
+            {/* Top Bar */}
+            <div className="bg-black text-white py-2.5 text-[10px] font-black tracking-[0.4em] uppercase border-b border-white/10">
                 <div className="container mx-auto px-4 flex justify-between items-center">
-                    <div className="flex items-center space-x-5">
+                    <div className="flex items-center space-x-6">
                         <a href="https://instagram.com" className="hover:text-[#f78df6] transition-colors"><InstagramIcon /></a>
                         <a href="https://facebook.com" className="hover:text-[#f78df6] transition-colors"><FacebookIcon /></a>
                         <a href="tel:+34661202616" className="flex items-center gap-2 hover:text-[#f78df6]">
@@ -96,15 +97,15 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
                         </a>
                     </div>
                     
-                    <span className="flex-grow text-center px-4 animate-pulse text-[#f78df6]">
-                        ✨ LOYALTY CLUB: 15% DTO. DIRECTO ✨
+                    <span className="flex-grow text-center px-4 animate-pulse text-[#f78df6] hidden sm:block">
+                        ✨ CLUB LOYALTY: -15% DTO. DIRECTO EN TODA LA TIENDA ✨
                     </span>
 
                     <div className="flex items-center space-x-4">
                          <select
                             value={currency}
                             onChange={(e) => onCurrencyChange(e.target.value as Currency)}
-                            className="bg-transparent border-none focus:ring-0 cursor-pointer text-[10px] font-black p-0 uppercase"
+                            className="bg-transparent border-none focus:ring-0 cursor-pointer text-[10px] font-black p-0 uppercase text-[#f78df6]"
                         >
                             <option value="EUR">EUR (€)</option>
                             <option value="USD">USD ($)</option>
@@ -113,20 +114,20 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
                 </div>
             </div>
 
-            {/* Branding - White Background */}
+            {/* Branding - Pure White */}
             <div className="bg-white border-b border-gray-100">
-                <div className="container mx-auto px-4 lg:px-8">
-                    <div className="flex items-center justify-between h-20 md:h-24 relative">
-                        <div className="w-1/3 flex items-center">
+                <div className="container mx-auto px-6 lg:px-12">
+                    <div className="flex items-center justify-between h-24 relative">
+                        <div className="w-1/4 flex items-center">
                             <button 
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-                                className="md:hidden bg-black text-white p-3 rounded-xl hover:bg-gray-800 transition-colors"
+                                className="md:hidden bg-black text-white p-4 rounded-2xl hover:bg-gray-800 transition-colors shadow-lg"
                             >
                                 <MenuIcon />
                             </button>
                             <div className="hidden md:flex flex-col">
-                                <span className="text-[10px] text-[#f78df6] font-black uppercase tracking-widest">Estilismo & Color</span>
-                                <span className="text-[12px] text-black font-black uppercase tracking-tighter">Vellaperfumeria.com</span>
+                                <span className="text-[10px] text-[#f78df6] font-black uppercase tracking-[0.4em] mb-1">Estilismo & Color</span>
+                                <span className="text-[14px] text-black font-black uppercase tracking-tighter italic">Vellaperfumeria.com</span>
                             </div>
                         </div>
 
@@ -134,15 +135,15 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
                              <img 
                                 src="https://i0.wp.com/vellaperfumeria.com/wp-content/uploads/2025/06/1000003724-removebg-preview.png" 
                                 alt="Vellaperfumeria" 
-                                className="h-16 md:h-20 w-auto hover:scale-105 transition-transform duration-500" 
+                                className="h-16 md:h-24 w-auto hover:scale-110 transition-transform duration-500 ease-expo" 
                             />
                         </div>
 
-                        <div className="w-1/3 flex items-center justify-end space-x-6">
-                            <button onClick={onCartClick} className="relative p-3.5 bg-black text-white rounded-full hover:bg-gray-800 transition-all shadow-xl hover:shadow-[#f78df6]/20 group">
+                        <div className="w-1/4 flex items-center justify-end">
+                            <button onClick={onCartClick} className="relative p-5 bg-black text-white rounded-full hover:bg-gray-800 transition-all shadow-2xl group active:scale-90">
                                 <CartIcon />
                                 {cartCount > 0 && (
-                                    <span className="absolute -top-1 -right-1 bg-[#f78df6] text-black text-[11px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-white animate-pop">
+                                    <span className="absolute -top-1.5 -right-1.5 bg-[#f78df6] text-black text-[11px] font-black w-7 h-7 rounded-full flex items-center justify-center border-2 border-white animate-pop">
                                         {cartCount}
                                     </span>
                                 )}
@@ -152,41 +153,41 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
                 </div>
             </div>
 
-            {/* Menú Negro de Ancho Completo */}
-            <nav className="hidden md:block bg-black w-full border-b border-white/5 relative overflow-visible">
+            {/* Navigation - Full Width Solid Black */}
+            <nav className="hidden md:block bg-black w-full border-b border-white/5 relative">
                 <div className="container mx-auto">
-                    <div className="flex justify-center items-center h-14">
+                    <div className="flex justify-center items-center h-20">
                         <NavLink onClick={handleHomeRedirect}>Inicio</NavLink>
                         
                         <div 
-                            className="h-full relative group"
+                            className="h-full relative"
                             onMouseEnter={() => setIsDropdownOpen(true)}
                             onMouseLeave={() => setIsDropdownOpen(false)}
                         >
                             <NavLink onClick={() => onNavigate('products', 'all')}>
-                                Tienda
-                                <svg className={`w-3.5 h-3.5 ml-2 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7" /></svg>
+                                Tienda Online
+                                <svg className={`w-3.5 h-3.5 ml-3 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M19 9l-7 7-7-7" /></svg>
                             </NavLink>
 
-                            {/* Dropdown - Fondo Negro Visible */}
-                            <div className={`absolute top-full left-1/2 transform -translate-x-1/2 w-72 bg-black shadow-[0_30px_60px_rgba(0,0,0,0.8)] border-t-2 border-[#f78df6] transition-all duration-300 z-[150] ${isDropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-4'}`}>
-                                <ul className="py-5">
+                            {/* Dropdown - Solid Black and Fully Visible */}
+                            <div className={`absolute top-full left-1/2 transform -translate-x-1/2 w-80 bg-black shadow-[0_40px_80px_rgba(0,0,0,0.95)] border-t-2 border-[#f78df6] transition-all duration-300 z-[150] ${isDropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-6'}`}>
+                                <ul className="py-8">
                                     {categories.map(cat => (
                                         <li key={cat.key}>
                                             <button 
                                                 onClick={() => { onNavigate('products', cat.key); setIsDropdownOpen(false); }}
-                                                className="w-full text-left px-10 py-4 text-white hover:bg-white/5 hover:text-[#f78df6] font-black uppercase tracking-[0.25em] text-[10px] transition-all"
+                                                className="w-full text-left px-12 py-4 text-white hover:bg-white/5 hover:text-[#f78df6] font-black uppercase tracking-[0.35em] text-[10px] transition-all"
                                             >
                                                 {cat.name}
                                             </button>
                                         </li>
                                     ))}
-                                    <li className="pt-4 border-t border-white/10 mt-2">
+                                    <li className="pt-6 border-t border-white/10 mt-4">
                                         <button 
-                                            onClick={() => onNavigate('ofertas')}
-                                            className="w-full text-left px-10 py-4 text-[#f78df6] hover:bg-[#f78df6]/5 font-black uppercase tracking-[0.25em] text-[10px] transition-all"
+                                            onClick={() => { onNavigate('ofertas'); setIsDropdownOpen(false); }}
+                                            className="w-full text-left px-12 py-4 text-[#f78df6] hover:bg-white/5 font-black uppercase tracking-[0.35em] text-[10px] transition-all animate-pulse"
                                         >
-                                            Ver Ofertas
+                                            Ofertas Oro 2026
                                         </button>
                                     </li>
                                 </ul>
@@ -194,24 +195,24 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
                         </div>
 
                         <NavLink onClick={() => onNavigate('catalog')}>Catálogo Digital</NavLink>
-                        <NavLink onClick={() => onNavigate('ia')} className="text-[#E0C3FC]">Beauty AI</NavLink>
-                        <NavLink onClick={() => onNavigate('ofertas')} className="text-red-400">Ofertas 2026</NavLink>
+                        <NavLink onClick={() => onNavigate('ia')} className="text-[#E0C3FC]">Beauty AI AR</NavLink>
+                        <NavLink onClick={() => onNavigate('ofertas')} className="text-red-400">Ofertas -15% DTO</NavLink>
                         <NavLink onClick={() => onNavigate('blog')}>Novedades</NavLink>
                     </div>
                 </div>
             </nav>
 
-            {/* Mobile Nav */}
+            {/* Mobile Menu */}
             <div className={`md:hidden fixed inset-0 bg-black/98 z-[200] transition-all duration-500 flex flex-col p-12 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-                 <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-8 right-8 text-[#f78df6]">
-                    <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                 <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-10 right-10 text-[#f78df6]">
+                    <svg className="w-14 h-14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                  </button>
-                 <nav className="flex flex-col space-y-10 text-white font-black uppercase tracking-[0.3em] text-2xl mt-20">
-                     <button onClick={handleHomeRedirect} className="text-left border-b border-white/10 pb-4">Inicio</button>
-                     <button onClick={() => { onNavigate('products', 'all'); setIsMobileMenuOpen(false); }} className="text-left border-b border-white/10 pb-4">Tienda</button>
-                     <button onClick={() => { onNavigate('ofertas'); setIsMobileMenuOpen(false); }} className="text-left border-b border-white/10 pb-4 text-red-400">Ofertas</button>
-                     <button onClick={() => { onNavigate('catalog'); setIsMobileMenuOpen(false); }} className="text-left border-b border-white/10 pb-4">Catálogo</button>
-                     <button onClick={() => { onNavigate('ia'); setIsMobileMenuOpen(false); }} className="text-left text-[#E0C3FC]">Beauty AI</button>
+                 <nav className="flex flex-col space-y-12 text-white font-black uppercase tracking-[0.4em] text-4xl mt-24">
+                     <button onClick={handleHomeRedirect} className="text-left border-b border-white/10 pb-8">Inicio</button>
+                     <button onClick={() => { onNavigate('products', 'all'); setIsMobileMenuOpen(false); }} className="text-left border-b border-white/10 pb-8">Tienda</button>
+                     <button onClick={() => { onNavigate('ofertas'); setIsMobileMenuOpen(false); }} className="text-left border-b border-white/10 pb-8 text-red-400">Ofertas</button>
+                     <button onClick={() => { onNavigate('catalog'); setIsMobileMenuOpen(false); }} className="text-left border-b border-white/10 pb-8">Catálogo</button>
+                     <button onClick={() => { onNavigate('ia'); setIsMobileMenuOpen(false); }} className="text-left text-[#E0C3FC]">Beauty AI AR</button>
                  </nav>
             </div>
         </header>
