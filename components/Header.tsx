@@ -78,34 +78,34 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
     const categories = [
         { key: 'makeup', name: 'Maquillaje Profesional' },
         { key: 'skincare', name: 'Cuidado Facial 2026' },
-        { key: 'perfume', name: 'Fragancias de Autor' },
-        { key: 'personal-care', name: 'Cuerpo & Baño' },
-        { key: 'wellness', name: 'Wellness by Oriflame' },
+        { key: 'perfume', name: 'Fragancias de Lujo' },
+        { key: 'personal-care', name: 'Higiene & Bienestar' },
+        { key: 'accessories', name: 'Complementos' },
     ];
 
     return (
         <header className="sticky top-0 z-[100] flex flex-col w-full shadow-2xl">
-            {/* Top Bar */}
-            <div className="bg-black text-white py-2.5 text-[10px] font-black tracking-[0.4em] uppercase border-b border-white/10">
+            {/* Top Bar - Club Information & Socials - Transparent Vella Pink Style */}
+            <div className="bg-[#f78df6]/20 backdrop-blur-md text-black py-2.5 text-[10px] font-black tracking-[0.4em] uppercase border-b border-[#f78df6]/30">
                 <div className="container mx-auto px-4 flex justify-between items-center">
                     <div className="flex items-center space-x-6">
-                        <a href="https://instagram.com" className="hover:text-[#f78df6] transition-colors"><InstagramIcon /></a>
-                        <a href="https://facebook.com" className="hover:text-[#f78df6] transition-colors"><FacebookIcon /></a>
-                        <a href="tel:+34661202616" className="flex items-center gap-2 hover:text-[#f78df6]">
+                        <a href="https://instagram.com" className="hover:text-white transition-colors"><InstagramIcon /></a>
+                        <a href="https://facebook.com" className="hover:text-white transition-colors"><FacebookIcon /></a>
+                        <a href="tel:+34661202616" className="flex items-center gap-2 hover:text-white">
                              <WhatsAppIcon />
                              <span className="hidden sm:inline">+34 661 202 616</span>
                         </a>
                     </div>
                     
-                    <span className="flex-grow text-center px-4 animate-pulse text-[#f78df6] hidden sm:block">
-                        ✨ CLUB LOYALTY: -15% DTO. DIRECTO EN TODA LA TIENDA ✨
+                    <span className="flex-grow text-center px-4 animate-pulse text-black hidden sm:block">
+                        ✨ OFERTAS ORO 2026: -15% DTO. DIRECTO EN TU BOLSA ✨
                     </span>
 
                     <div className="flex items-center space-x-4">
                          <select
                             value={currency}
                             onChange={(e) => onCurrencyChange(e.target.value as Currency)}
-                            className="bg-transparent border-none focus:ring-0 cursor-pointer text-[10px] font-black p-0 uppercase text-[#f78df6]"
+                            className="bg-transparent border-none focus:ring-0 cursor-pointer text-[10px] font-black p-0 uppercase text-black"
                         >
                             <option value="EUR">EUR (€)</option>
                             <option value="USD">USD ($)</option>
@@ -114,7 +114,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
                 </div>
             </div>
 
-            {/* Branding - Pure White */}
+            {/* Branding Section - White Full Width */}
             <div className="bg-white border-b border-gray-100">
                 <div className="container mx-auto px-6 lg:px-12">
                     <div className="flex items-center justify-between h-24 relative">
@@ -153,12 +153,13 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
                 </div>
             </div>
 
-            {/* Navigation - Full Width Solid Black */}
+            {/* Main Nav - Solid Black Full Width */}
             <nav className="hidden md:block bg-black w-full border-b border-white/5 relative">
                 <div className="container mx-auto">
                     <div className="flex justify-center items-center h-20">
                         <NavLink onClick={handleHomeRedirect}>Inicio</NavLink>
                         
+                        {/* Visible Dropdown on Black */}
                         <div 
                             className="h-full relative"
                             onMouseEnter={() => setIsDropdownOpen(true)}
@@ -169,7 +170,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
                                 <svg className={`w-3.5 h-3.5 ml-3 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M19 9l-7 7-7-7" /></svg>
                             </NavLink>
 
-                            {/* Dropdown - Solid Black and Fully Visible */}
+                            {/* Dropdown Container - No Transparency, Solid Black */}
                             <div className={`absolute top-full left-1/2 transform -translate-x-1/2 w-80 bg-black shadow-[0_40px_80px_rgba(0,0,0,0.95)] border-t-2 border-[#f78df6] transition-all duration-300 z-[150] ${isDropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-6'}`}>
                                 <ul className="py-8">
                                     {categories.map(cat => (
@@ -187,7 +188,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
                                             onClick={() => { onNavigate('ofertas'); setIsDropdownOpen(false); }}
                                             className="w-full text-left px-12 py-4 text-[#f78df6] hover:bg-white/5 font-black uppercase tracking-[0.35em] text-[10px] transition-all animate-pulse"
                                         >
-                                            Ofertas Oro 2026
+                                            Ofertas 2026 🔥
                                         </button>
                                     </li>
                                 </ul>
@@ -195,14 +196,14 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
                         </div>
 
                         <NavLink onClick={() => onNavigate('catalog')}>Catálogo Digital</NavLink>
-                        <NavLink onClick={() => onNavigate('ia')} className="text-[#E0C3FC]">Beauty AI AR</NavLink>
-                        <NavLink onClick={() => onNavigate('ofertas')} className="text-red-400">Ofertas -15% DTO</NavLink>
+                        <NavLink onClick={() => onNavigate('ia')} className="text-[#E0C3FC]">Beauty AI Analysis</NavLink>
+                        <NavLink onClick={() => onNavigate('ofertas')} className="text-red-400">Promociones Oro</NavLink>
                         <NavLink onClick={() => onNavigate('blog')}>Novedades</NavLink>
                     </div>
                 </div>
             </nav>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu Overlay */}
             <div className={`md:hidden fixed inset-0 bg-black/98 z-[200] transition-all duration-500 flex flex-col p-12 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
                  <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-10 right-10 text-[#f78df6]">
                     <svg className="w-14 h-14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -210,9 +211,9 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
                  <nav className="flex flex-col space-y-12 text-white font-black uppercase tracking-[0.4em] text-4xl mt-24">
                      <button onClick={handleHomeRedirect} className="text-left border-b border-white/10 pb-8">Inicio</button>
                      <button onClick={() => { onNavigate('products', 'all'); setIsMobileMenuOpen(false); }} className="text-left border-b border-white/10 pb-8">Tienda</button>
-                     <button onClick={() => { onNavigate('ofertas'); setIsMobileMenuOpen(false); }} className="text-left border-b border-white/10 pb-8 text-red-400">Ofertas</button>
+                     <button onClick={() => { onNavigate('ofertas'); setIsMobileMenuOpen(false); }} className="text-left border-b border-white/10 pb-8 text-red-400">Ofertas 2026</button>
                      <button onClick={() => { onNavigate('catalog'); setIsMobileMenuOpen(false); }} className="text-left border-b border-white/10 pb-8">Catálogo</button>
-                     <button onClick={() => { onNavigate('ia'); setIsMobileMenuOpen(false); }} className="text-left text-[#E0C3FC]">Beauty AI AR</button>
+                     <button onClick={() => { onNavigate('ia'); setIsMobileMenuOpen(false); }} className="text-left text-[#E0C3FC]">Beauty AI</button>
                  </nav>
             </div>
         </header>

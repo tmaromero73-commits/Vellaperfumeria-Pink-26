@@ -131,11 +131,12 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
                      <div>
                         <h3 className="text-base font-bold tracking-widest uppercase mb-4 text-white">Síguenos</h3>
-                        <div className="flex justify-center md:justify-start space-x-4 text-white mb-6">
-                           <span className="cursor-pointer hover:opacity-80 transition-all duration-300 transform hover:scale-110" aria-label="Threads"><ThreadsIcon /></span>
-                           <span className="cursor-pointer hover:opacity-80 transition-all duration-300 transform hover:scale-110" aria-label="Instagram"><InstagramIcon /></span>
-                           <span className="cursor-pointer hover:opacity-80 transition-all duration-300 transform hover:scale-110" aria-label="Facebook"><FacebookIcon /></span>
-                           <span className="cursor-pointer hover:opacity-80 transition-all duration-300 transform hover:scale-110" aria-label="WhatsApp"><WhatsAppIcon /></span>
+                        {/* Social Links Section with Vella Pink Transparent background */}
+                        <div className="flex justify-center md:justify-start space-x-4 text-white mb-6 p-4 rounded-2xl bg-[#f78df6]/10 backdrop-blur-sm border border-[#f78df6]/20">
+                           <span className="cursor-pointer hover:text-[#f78df6] transition-all duration-300 transform hover:scale-110" aria-label="Threads"><ThreadsIcon /></span>
+                           <span className="cursor-pointer hover:text-[#f78df6] transition-all duration-300 transform hover:scale-110" aria-label="Instagram"><InstagramIcon /></span>
+                           <span className="cursor-pointer hover:text-[#f78df6] transition-all duration-300 transform hover:scale-110" aria-label="Facebook"><FacebookIcon /></span>
+                           <span className="cursor-pointer hover:text-[#f78df6] transition-all duration-300 transform hover:scale-110" aria-label="WhatsApp"><WhatsAppIcon /></span>
                         </div>
                         
                         <h3 className="text-base font-bold tracking-widest uppercase mb-4 text-white">Métodos de Pago</h3>
