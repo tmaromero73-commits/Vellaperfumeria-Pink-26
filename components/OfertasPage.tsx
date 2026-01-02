@@ -13,53 +13,41 @@ const OfertasPage: React.FC<{
     onQuickView: (product: Product) => void;
 }> = ({ currency, onAddToCart, onQuickAddToCart, onProductSelect, onQuickView }) => {
     
-    const makeupOffers = allProducts.filter(p => p.category === 'makeup' && p.tag === 'OFERTA');
-    const news2026 = allProducts.filter(p => p.tag === 'NOVEDAD');
+    // Filtrar por marcas y categorías solicitadas
+    const giftIdeas = allProducts.filter(p => 
+        p.brand.includes('Milk & Honey') || p.name.includes('Magnolia') || p.tag === 'SET'
+    );
+    const makeupOffers = allProducts.filter(p => 
+        (p.category === 'makeup' || p.brand.includes('Giordani') || p.brand.includes('THE ONE')) && p.tag === 'OFERTA'
+    );
 
     return (
         <div className="bg-white min-h-screen pb-20">
-            {/* Promo Hero */}
-            <div className="bg-black text-white py-20 px-4 text-center">
-                <div className="container mx-auto">
-                    <span className="text-[#f78df6] font-black uppercase tracking-[0.3em] text-sm mb-4 block">Especial Maquillaje 2026</span>
-                    <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-6">Ofertas Irresistibles</h1>
-                    <p className="text-gray-400 max-w-2xl mx-auto text-lg md:text-xl">Consigue los iconos de THE ONE y OnColour con descuentos de hasta el 50% solo este mes.</p>
+            {/* Promo Hero Oriflame 2026 */}
+            <div className="bg-black text-white py-24 px-4 text-center relative overflow-hidden">
+                <div className="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?auto=format&fit=crop&q=80')] bg-cover bg-center"></div>
+                <div className="container mx-auto relative z-10">
+                    <span className="text-[#E0C3FC] font-black uppercase tracking-[0.4em] text-xs mb-4 block">Exclusividad Oriflame 2026</span>
+                    <h1 className="text-6xl md:text-9xl font-black uppercase tracking-tighter mb-8 italic">Ofertas Oro</h1>
+                    <p className="text-gray-400 max-w-2xl mx-auto text-lg md:text-2xl font-medium">Las mejores ideas para regalar y las últimas tendencias en maquillaje profesional con descuentos históricos.</p>
                 </div>
             </div>
 
-            <div className="container mx-auto px-4 -mt-10">
-                {/* Featured Offer Card */}
-                <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-10 border border-gray-100 mb-20">
-                    <div className="w-full md:w-1/2">
-                        <img src="https://media-cdn.oriflame.com/productImage?externalMediaId=product-management-media%2FProducts%2F42120%2F42120_1.png" className="w-full h-auto max-h-[400px] object-contain drop-shadow-2xl animate-bounce-subtle" />
-                    </div>
-                    <div className="w-full md:w-1/2 space-y-6">
-                        <span className="bg-red-500 text-white font-black py-1 px-4 rounded text-xs uppercase">Oferta Estrella</span>
-                        <h2 className="text-4xl font-black text-black uppercase tracking-tight">THE ONE Wonder Lash Ultra</h2>
-                        <p className="text-gray-600 text-lg leading-relaxed">
-                            La máscara 5 en 1 que define el 2026. Alarga, voluminiza y cuida tus pestañas por un precio nunca visto.
-                        </p>
-                        <div className="flex items-center gap-4">
-                            <span className="text-5xl font-black text-red-600">8,99€</span>
-                            <span className="text-2xl text-gray-300 line-through">16,00€</span>
+            <div className="container mx-auto px-4 -mt-16">
+                
+                {/* Section: Ideas para Regalar (Milk & Honey & Magnolia) */}
+                <section className="mb-24">
+                    <div className="flex flex-col md:flex-row items-end justify-between mb-12 gap-4">
+                        <div className="max-w-xl">
+                            <h2 className="text-4xl md:text-5xl font-black text-black uppercase tracking-tighter mb-2">Ideas para Regalar</h2>
+                            <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">El lujo de Milk & Honey Gold y la frescura de Magnolia</p>
                         </div>
-                        <button 
-                            onClick={() => onProductSelect(allProducts.find(p => p.id === 42120)!)}
-                            className="bg-black text-white font-black py-4 px-10 rounded-full hover:bg-gray-800 transition-all uppercase tracking-widest text-sm shadow-xl"
-                        >
-                            Lo quiero ahora
-                        </button>
+                        <div className="h-[2px] bg-black flex-grow mx-8 hidden lg:block mb-4"></div>
+                        <span className="bg-[#E0C3FC] text-black px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest">Edición Regalo</span>
                     </div>
-                </div>
-
-                {/* Section: Makeup Deals */}
-                <section className="mb-20">
-                    <div className="flex items-center justify-between mb-10">
-                        <h3 className="text-3xl font-black text-black uppercase tracking-tighter">Maquillaje en Oferta</h3>
-                        <div className="h-[2px] bg-black flex-grow mx-8"></div>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                        {makeupOffers.map(product => (
+                    
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+                        {giftIdeas.map(product => (
                             <ProductCard
                                 key={product.id}
                                 product={product}
@@ -73,14 +61,37 @@ const OfertasPage: React.FC<{
                     </div>
                 </section>
 
-                {/* Section: 2026 Arrivals */}
-                <section>
-                    <div className="flex items-center justify-between mb-10">
-                        <h3 className="text-3xl font-black text-black uppercase tracking-tighter">Novedades 2026</h3>
-                        <div className="h-[2px] bg-black flex-grow mx-8"></div>
+                {/* Banner Intermedio - Oriflame Makeup Focus */}
+                <div className="bg-gray-100 rounded-[40px] p-8 md:p-16 mb-24 flex flex-col md:flex-row items-center justify-between border border-gray-200">
+                    <div className="md:w-1/2 mb-8 md:mb-0">
+                        <span className="text-gray-400 font-black uppercase tracking-widest text-xs mb-4 block">Makeup Experience</span>
+                        <h3 className="text-4xl md:text-6xl font-black text-black uppercase tracking-tighter leading-none mb-6">Maquillaje <br/> <span className="text-[#f78df6]">THE ONE 2026</span></h3>
+                        <p className="text-gray-600 text-lg mb-8 max-w-sm">Tecnología de adaptación inteligente y pigmentos de alta definición para un acabado profesional.</p>
+                        <button 
+                            onClick={() => window.scrollTo({ top: document.getElementById('makeup-section')?.offsetTop, behavior: 'smooth' })}
+                            className="bg-black text-white font-black py-4 px-10 rounded-full hover:scale-105 transition-transform uppercase tracking-widest text-[10px]"
+                        >
+                            Ver Maquillaje
+                        </button>
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                        {news2026.map(product => (
+                    <div className="md:w-1/2 flex justify-center">
+                        <img src="https://media-cdn.oriflame.com/productImage?externalMediaId=product-management-media%2FProducts%2F42120%2F42120_1.png" className="h-64 md:h-96 w-auto drop-shadow-2xl animate-bounce-subtle" alt="Maquillaje Oriflame" />
+                    </div>
+                </div>
+
+                {/* Section: Makeup Offers 2026 */}
+                <section id="makeup-section">
+                    <div className="flex flex-col md:flex-row items-end justify-between mb-12 gap-4">
+                        <div className="max-w-xl">
+                            <h2 className="text-4xl md:text-5xl font-black text-black uppercase tracking-tighter mb-2">Maquillaje Profesional</h2>
+                            <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Giordani Gold, THE ONE y OnColour</p>
+                        </div>
+                        <div className="h-[2px] bg-black flex-grow mx-8 hidden lg:block mb-4"></div>
+                        <span className="bg-red-500 text-white px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest">Ofertas 2026</span>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+                        {makeupOffers.map(product => (
                             <ProductCard
                                 key={product.id}
                                 product={product}

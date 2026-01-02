@@ -19,20 +19,26 @@ const ProductList: React.FC<{
     
     // --- DATA FILTERING BASED ON PROVIDED WOOCOMMERCE BLOCKS ---
 
-    // 1. All Products Block (Muestra una selección amplia)
+    // 1. All Products Block
     const allProductsBlock = allProducts.slice(0, 8);
 
     // 2. Featured Product Block (Divine - ID 38497)
     const featuredProduct = allProducts.find(p => p.id === 38497); 
 
-    // 3. Hand-Picked Products Block (Selección específica)
+    // 3. Hand-Picked Products Block
     const handPickedIds = [46642, 36151, 46968, 41338]; 
     const handPickedBlock = allProducts.filter(p => handPickedIds.includes(p.id));
 
-    // 4. Best Selling Products Block (Alta valoración)
+    // 4. Best Selling Products Block
     const bestSellersBlock = allProducts.filter(p => p.rating && p.rating >= 4.9).slice(0, 4);
 
-    // 5. Products By Category Block
+    // 5. Top Rated Products Block (New requested section)
+    const topRatedBlock = allProducts
+        .filter(p => p.rating && p.rating > 4.5)
+        .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+        .slice(0, 4);
+
+    // 6. Products By Category Block
     const categoriesBlock = [
         { id: 'skincare', label: 'Facial', img: 'https://media-cdn.oriflame.com/productImage?externalMediaId=product-management-media%2FProducts%2F41058%2F41058_1.png' },
         { id: 'makeup', label: 'Maquillaje', img: 'https://media-cdn.oriflame.com/productImage?externalMediaId=product-management-media%2FProducts%2F43237%2F43237_1.png' },
@@ -40,13 +46,12 @@ const ProductList: React.FC<{
         { id: 'wellness', label: 'Wellness', img: 'https://media-cdn.oriflame.com/productImage?externalMediaId=product-management-media%2FProducts%2F29696%2F29696.png' },
     ];
 
-    // 6. Newest Products Block (Tag: NOVEDAD)
+    // 7. Newest Products Block
     const newestBlock = allProducts.filter(p => p.tag === 'NOVEDAD').slice(0, 4);
     
     return (
         <div className="space-y-24">
             
-            {/* BLOCK 0: Hero / Banner (wp:image style) */}
             <HeroBanner onNavigate={onNavigate} />
 
             {/* BLOCK 1: ALL PRODUCTS */}
@@ -154,6 +159,32 @@ const ProductList: React.FC<{
                 </section>
             </div>
 
+            {/* NEW BLOCK: TOP RATED PRODUCTS */}
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <section>
+                    <div className="flex items-center justify-between mb-10">
+                        <div className="text-left">
+                            <h3 className="text-2xl font-extrabold text-black tracking-tight uppercase">Productos Mejor Valorados</h3>
+                            <p className="text-gray-500 text-sm mt-1 uppercase tracking-widest">Excelencia según nuestros clientes</p>
+                        </div>
+                        <div className="h-[2px] bg-black flex-grow mx-8 hidden sm:block"></div>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                        {topRatedBlock.map(product => (
+                            <ProductCard
+                                key={product.id}
+                                product={product}
+                                currency={currency}
+                                onAddToCart={onAddToCart}
+                                onQuickAddToCart={onQuickAddToCart}
+                                onProductSelect={onProductSelect}
+                                onQuickView={onQuickView}
+                            />
+                        ))}
+                    </div>
+                </section>
+            </div>
+
             {/* BLOCK 5: PRODUCTS BY CATEGORY */}
              <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-10">
@@ -205,7 +236,6 @@ const ProductList: React.FC<{
                 </section>
             </div>
 
-            {/* Footer Info Blocks */}
             <FeaturesSection />
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12">
                 <InteractiveCatalogSection onNavigate={onNavigate} />
