@@ -17,208 +17,30 @@ const ProductList: React.FC<{
     onQuickView: (product: Product) => void;
 }> = ({ onNavigate, onProductSelect, onAddToCart, onQuickAddToCart, currency, onQuickView }) => {
     
-    // --- DATA FILTERING BASED ON PROVIDED WOOCOMMERCE BLOCKS ---
-
-    // 1. All Products Block
     const allProductsBlock = allProducts.slice(0, 8);
-
-    // 2. Featured Product Block (Divine - ID 38497)
-    const featuredProduct = allProducts.find(p => p.id === 38497); 
-
-    // 3. Hand-Picked Products Block
-    const handPickedIds = [46642, 36151, 46968, 41338]; 
-    const handPickedBlock = allProducts.filter(p => handPickedIds.includes(p.id));
-
-    // 4. Best Selling Products Block
-    const bestSellersBlock = allProducts.filter(p => p.rating && p.rating >= 4.9).slice(0, 4);
-
-    // 5. Top Rated Products Block (New requested section)
-    const topRatedBlock = allProducts
-        .filter(p => p.rating && p.rating > 4.5)
-        .sort((a, b) => (b.rating || 0) - (a.rating || 0))
-        .slice(0, 4);
-
-    // 6. Products By Category Block
-    const categoriesBlock = [
-        { id: 'skincare', label: 'Facial', img: 'https://media-cdn.oriflame.com/productImage?externalMediaId=product-management-media%2FProducts%2F41058%2F41058_1.png' },
-        { id: 'makeup', label: 'Maquillaje', img: 'https://media-cdn.oriflame.com/productImage?externalMediaId=product-management-media%2FProducts%2F43237%2F43237_1.png' },
-        { id: 'perfume', label: 'Fragancias', img: 'https://media-cdn.oriflame.com/productImage?externalMediaId=product-management-media%2FProducts%2F38497%2FES%2F38497_1.png' },
-        { id: 'wellness', label: 'Wellness', img: 'https://media-cdn.oriflame.com/productImage?externalMediaId=product-management-media%2FProducts%2F29696%2F29696.png' },
-    ];
-
-    // 7. Newest Products Block
     const newestBlock = allProducts.filter(p => p.tag === 'NOVEDAD').slice(0, 4);
     
+    const categoriesBlock = [
+        { id: 'perfume', label: 'Fragancias Oriflame', img: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=800' },
+        { id: 'skincare', label: 'Cuidado Facial', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=800' },
+        { id: 'makeup', label: 'Maquillaje THE ONE', img: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&q=80&w=800' },
+        { id: 'wellness', label: 'Wellness & Salud', img: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=80&w=800' },
+    ];
+
     return (
-        <div className="space-y-24">
+        <div className="space-y-20 bg-white">
             
             <HeroBanner onNavigate={onNavigate} />
 
-            {/* BLOCK 1: ALL PRODUCTS */}
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            {/* SECCIÓN: LANZAMIENTOS */}
+            <div className="container mx-auto px-4 lg:px-16">
                 <section>
-                    <div className="flex items-center justify-between mb-8 border-b border-gray-200 pb-4">
-                        <h3 className="text-2xl font-extrabold text-black tracking-tight uppercase">Todos los Productos</h3>
-                        <button onClick={() => onNavigate('products', 'all')} className="text-sm font-bold text-brand-purple-dark hover:text-black uppercase tracking-wide">Ver Todo</button>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        {allProductsBlock.map(product => (
-                            <ProductCard
-                                key={product.id}
-                                product={product}
-                                currency={currency}
-                                onAddToCart={onAddToCart}
-                                onQuickAddToCart={onQuickAddToCart}
-                                onProductSelect={onProductSelect}
-                                onQuickView={onQuickView}
-                            />
-                        ))}
-                    </div>
-                </section>
-            </div>
-
-            {/* BLOCK 2: FEATURED PRODUCT */}
-            {featuredProduct && (
-                <div className="bg-gray-50 py-16 border-y border-gray-100">
-                    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="text-center mb-8">
-                            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest">Producto Destacado</h3>
+                    <div className="flex flex-col md:flex-row items-center justify-between mb-12 border-b border-black/5 pb-6">
+                        <div className="text-center md:text-left">
+                            <h3 className="text-3xl font-black text-black tracking-tighter uppercase italic">Lanzamientos 2026</h3>
+                            <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-1">Novedades exclusivas Oriflame</p>
                         </div>
-                        <div className="flex flex-col md:flex-row items-center gap-12 bg-white p-8 rounded-2xl shadow-sm">
-                            <div className="w-full md:w-1/2 flex justify-center">
-                                 <img src={featuredProduct.imageUrl} alt={featuredProduct.name} className="w-2/3 h-auto object-contain transform hover:scale-105 transition-transform duration-500" />
-                            </div>
-                            <div className="w-full md:w-1/2 text-center md:text-left">
-                                <h2 className="text-3xl md:text-4xl font-extrabold mb-4 text-brand-primary">{featuredProduct.name}</h2>
-                                <div className="flex items-center justify-center md:justify-start gap-2 mb-4">
-                                    <span className="text-2xl font-bold text-brand-purple-dark">
-                                        {featuredProduct.price.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })}
-                                    </span>
-                                    {featuredProduct.regularPrice && (
-                                        <span className="text-lg text-gray-400 line-through">
-                                            {featuredProduct.regularPrice.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })}
-                                        </span>
-                                    )}
-                                </div>
-                                <p className="text-gray-600 text-lg mb-8 leading-relaxed">{featuredProduct.description}</p>
-                                <button 
-                                    onClick={() => onProductSelect(featuredProduct)}
-                                    className="bg-black text-white font-bold py-3 px-10 rounded-full hover:bg-gray-800 transition-all shadow-lg"
-                                >
-                                    Comprar Ahora
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* BLOCK 3: HAND-PICKED PRODUCTS */}
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <section>
-                     <div className="text-center mb-10">
-                        <h3 className="text-2xl font-extrabold text-black tracking-tight uppercase">Selección Especial</h3>
-                        <div className="w-16 h-1 bg-brand-purple mx-auto mt-4"></div>
-                        <p className="mt-2 text-gray-600">Nuestros favoritos seleccionados a mano.</p>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        {handPickedBlock.map(product => (
-                            <ProductCard
-                                key={product.id}
-                                product={product}
-                                currency={currency}
-                                onAddToCart={onAddToCart}
-                                onQuickAddToCart={onQuickAddToCart}
-                                onProductSelect={onProductSelect}
-                                onQuickView={onQuickView}
-                            />
-                        ))}
-                    </div>
-                </section>
-            </div>
-
-            {/* BLOCK 4: BEST SELLING PRODUCTS */}
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <section className="bg-brand-purple/5 rounded-2xl p-8 border border-brand-purple/10">
-                    <div className="text-center mb-10">
-                        <h3 className="text-2xl font-extrabold text-black tracking-tight uppercase">Los Más Vendidos</h3>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        {bestSellersBlock.map(product => (
-                            <ProductCard
-                                key={product.id}
-                                product={product}
-                                currency={currency}
-                                onAddToCart={onAddToCart}
-                                onQuickAddToCart={onQuickAddToCart}
-                                onProductSelect={onProductSelect}
-                                onQuickView={onQuickView}
-                            />
-                        ))}
-                    </div>
-                </section>
-            </div>
-
-            {/* NEW BLOCK: TOP RATED PRODUCTS */}
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <section>
-                    <div className="flex items-center justify-between mb-10">
-                        <div className="text-left">
-                            <h3 className="text-2xl font-extrabold text-black tracking-tight uppercase">Productos Mejor Valorados</h3>
-                            <p className="text-gray-500 text-sm mt-1 uppercase tracking-widest">Excelencia según nuestros clientes</p>
-                        </div>
-                        <div className="h-[2px] bg-black flex-grow mx-8 hidden sm:block"></div>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                        {topRatedBlock.map(product => (
-                            <ProductCard
-                                key={product.id}
-                                product={product}
-                                currency={currency}
-                                onAddToCart={onAddToCart}
-                                onQuickAddToCart={onQuickAddToCart}
-                                onProductSelect={onProductSelect}
-                                onQuickView={onQuickView}
-                            />
-                        ))}
-                    </div>
-                </section>
-            </div>
-
-            {/* BLOCK 5: PRODUCTS BY CATEGORY */}
-             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-10">
-                    <h3 className="text-2xl font-extrabold text-black tracking-tight uppercase">Explora por Categoría</h3>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    {categoriesBlock.map((cat) => (
-                        <div 
-                            key={cat.id}
-                            onClick={() => onNavigate('products', cat.id)}
-                            className="group cursor-pointer relative overflow-hidden rounded-xl shadow-md aspect-[3/4] bg-gray-100 border border-gray-200"
-                        >
-                            <img 
-                                src={cat.img} 
-                                alt={cat.label} 
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
-                            />
-                            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300"></div>
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="bg-white/90 backdrop-blur-sm px-6 py-3 rounded-lg text-black font-bold text-lg uppercase tracking-wide shadow-lg group-hover:bg-white transition-colors">
-                                    {cat.label}
-                                </span>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            
-            {/* BLOCK 6: NEWEST PRODUCTS */}
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <section>
-                    <div className="text-center mb-10">
-                        <h3 className="text-2xl font-extrabold text-black tracking-tight uppercase">Novedades</h3>
-                        <div className="w-16 h-1 bg-gray-200 mx-auto mt-4"></div>
+                        <button onClick={() => onNavigate('products', 'all')} className="mt-4 md:mt-0 text-[10px] font-black text-black hover:text-[#f78df6] transition-colors uppercase tracking-[0.3em] border-b-2 border-black hover:border-[#f78df6]">Ver todo el catálogo</button>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                         {newestBlock.map(product => (
@@ -236,8 +58,61 @@ const ProductList: React.FC<{
                 </section>
             </div>
 
+            {/* SECCIÓN: EXPLORA CATEGORÍAS */}
+            <div className="container mx-auto px-4 lg:px-16">
+                <div className="text-center mb-12">
+                    <h3 className="text-4xl font-black text-black tracking-tighter uppercase italic">Estilismo & Color</h3>
+                    <div className="w-16 h-1 bg-[#f78df6] mx-auto mt-4"></div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                    {categoriesBlock.map((cat) => (
+                        <div 
+                            key={cat.id}
+                            onClick={() => onNavigate('products', cat.id)}
+                            className="group cursor-pointer relative overflow-hidden rounded-3xl aspect-[3/4] bg-white border border-gray-100 shadow-xl"
+                        >
+                            <img 
+                                src={cat.img} 
+                                alt={cat.label} 
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/40 transition-colors"></div>
+                            <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+                                <span className="bg-white/95 backdrop-blur-md px-5 py-2.5 rounded-full text-black font-black text-[10px] uppercase tracking-[0.2em] shadow-2xl group-hover:bg-[#f78df6] transition-colors">
+                                    {cat.label}
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* SECCIÓN: PRODUCTOS DESTACADOS */}
+            <div className="container mx-auto px-4 lg:px-16">
+                <section>
+                    <div className="flex items-center mb-12">
+                        <h3 className="text-3xl font-black text-black tracking-tighter uppercase italic whitespace-nowrap">Favoritos del Mes</h3>
+                        <div className="h-[2px] bg-black/5 flex-grow ml-8"></div>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                        {allProductsBlock.map(product => (
+                            <ProductCard
+                                key={product.id}
+                                product={product}
+                                currency={currency}
+                                onAddToCart={onAddToCart}
+                                onQuickAddToCart={onQuickAddToCart}
+                                onProductSelect={onProductSelect}
+                                onQuickView={onQuickView}
+                            />
+                        ))}
+                    </div>
+                </section>
+            </div>
+
             <FeaturesSection />
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+            
+            <div className="container mx-auto px-4 lg:px-16 pb-20">
                 <InteractiveCatalogSection onNavigate={onNavigate} />
             </div>
         </div>

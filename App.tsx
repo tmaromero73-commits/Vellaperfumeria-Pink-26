@@ -165,11 +165,12 @@ const App: React.FC = () => {
                     --color-primary: #000000;
                     --color-secondary: #f78df6; 
                     --color-accent: #E0C3FC;
+                    --color-bg: #ffffff;
                 }
                 
                 body {
                     color: #1a1a1a;
-                    background-color: #ffffff;
+                    background-color: var(--color-bg);
                 }
 
                 @font-face {
@@ -186,46 +187,34 @@ const App: React.FC = () => {
 
                 @keyframes pop {
                     0% { transform: scale(1); }
-                    50% { transform: scale(1.2); }
+                    50% { transform: scale(1.1); }
                     100% { transform: scale(1); }
                 }
                 .animate-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
                 
                 @keyframes bounce-subtle {
                     0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-8px); }
+                    50% { transform: translateY(-5px); }
                 }
                 .animate-bounce-subtle { animation: bounce-subtle 3s infinite ease-in-out; }
-                
-                main > div {
-                    animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-                }
-                
-                @keyframes fadeIn {
-                    from { opacity: 0; transform: translateY(10px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
 
                 .hover-scale {
                     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
                 }
                 .hover-scale:hover {
-                    transform: scale(1.02);
+                    transform: scale(1.01);
                 }
 
-                /* Custom Scrollbar for a premium look */
+                /* Custom Scrollbar */
                 ::-webkit-scrollbar {
                     width: 6px;
                 }
                 ::-webkit-scrollbar-track {
-                    background: #f1f1f1;
+                    background: #ffffff;
                 }
                 ::-webkit-scrollbar-thumb {
                     background: #000000;
                     border-radius: 10px;
-                }
-                ::-webkit-scrollbar-thumb:hover {
-                    background: #333;
                 }
             `}</style>
         </div>

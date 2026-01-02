@@ -15,6 +15,18 @@ const CartIcon = () => (
     </svg>
 );
 
+const InstagramIcon = () => (
+    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919A118.663 118.663 0 0112 2.163zm0 1.442c-3.143 0-3.509.011-4.72.067-2.694.123-3.997 1.433-4.12 4.12C3.109 9.12 3.098 9.486 3.098 12c0 2.514.011 2.88.067 4.72.123 2.686 1.427 3.996 4.12 4.12 1.21.055 1.577.067 4.72.067 3.143 0 3.509-.011 4.72-.067 2.694-.123 3.997-1.433 4.12-4.12.056-1.84.067-2.206.067-4.72 0-2.514-.011-2.88-.067-4.72-.123-2.686-1.427-3.996-4.12-4.12-1.21-.055-1.577.067-4.72-.067zM12 8.25a3.75 3.75 0 100 7.5 3.75 3.75 0 000-7.5zm0 1.44a2.31 2.31 0 110 4.62 2.31 2.31 0 010-4.62zM18.88 6.54a1.32 1.32 0 100-2.64 1.32 1.32 0 000 2.64z"/></svg>
+);
+
+const FacebookIcon = () => (
+    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+);
+
+const WhatsAppIcon = () => (
+    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 4.315 1.919 6.066l-1.475 5.422 5.571-1.469z"/></svg>
+);
+
 const NavLink: React.FC<{ 
     onClick?: () => void, 
     children: React.ReactNode, 
@@ -22,7 +34,7 @@ const NavLink: React.FC<{
     onMouseEnter?: () => void,
     onMouseLeave?: () => void
 }> = ({ onClick, children, className, onMouseEnter, onMouseLeave }) => {
-    const defaultClass = "text-white hover:text-[#f78df6] transition-all duration-300 uppercase tracking-[0.25em] text-[11px] font-black py-5 px-8 flex items-center h-full relative group";
+    const defaultClass = "text-white hover:text-[#f78df6] transition-all duration-300 uppercase tracking-[0.2em] text-[11px] font-black py-5 px-6 flex items-center h-full relative group";
     return (
         <button 
             onClick={onClick} 
@@ -49,6 +61,10 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navRef = useRef<HTMLDivElement>(null);
 
+    const handleHomeRedirect = () => {
+        window.location.href = "https://vellaperfumeria.com";
+    };
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (navRef.current && !navRef.current.contains(event.target as Node)) {
@@ -68,11 +84,22 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
 
     return (
         <header className="sticky top-0 z-[100] flex flex-col w-full shadow-lg">
-            {/* Loyalty Bar */}
-            <div className="bg-[#f78df6] text-black py-2.5 text-[10px] font-black tracking-[0.3em] text-center uppercase">
+            {/* Barra de Anuncios y Social - Full Width */}
+            <div className="bg-black text-white py-2.5 text-[10px] font-black tracking-[0.2em] uppercase border-b border-white/10">
                 <div className="container mx-auto px-4 flex justify-between items-center">
-                    <span className="hidden md:inline">✨ igualalavellaperfumeria.com — DESCUENTO FIDELIDAD: 15% EN TODA TU CESTA ✨</span>
-                    <span className="md:hidden">FIDELIDAD: -15% DTO.</span>
+                    <div className="flex items-center space-x-5">
+                        <a href="https://instagram.com" className="hover:text-[#f78df6] transition-colors"><InstagramIcon /></a>
+                        <a href="https://facebook.com" className="hover:text-[#f78df6] transition-colors"><FacebookIcon /></a>
+                        <a href="tel:+34661202616" className="flex items-center gap-2 hover:text-[#f78df6]">
+                             <WhatsAppIcon />
+                             <span className="hidden sm:inline">+34 661 202 616</span>
+                        </a>
+                    </div>
+                    
+                    <span className="flex-grow text-center px-4 animate-pulse text-[#f78df6]">
+                        ✨ LOYALTY CLUB: 15% DTO. DIRECTO ✨
+                    </span>
+
                     <div className="flex items-center space-x-4">
                          <select
                             value={currency}
@@ -86,33 +113,33 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
                 </div>
             </div>
 
-            {/* Branding Bar */}
+            {/* Branding - White Background */}
             <div className="bg-white border-b border-gray-100">
                 <div className="container mx-auto px-4 lg:px-8">
-                    <div className="flex items-center justify-between h-20 md:h-28 relative">
+                    <div className="flex items-center justify-between h-20 md:h-24 relative">
                         <div className="w-1/3 flex items-center">
                             <button 
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-                                className="md:hidden bg-black text-white p-2.5 rounded-lg hover:bg-gray-800 transition-colors"
+                                className="md:hidden bg-black text-white p-3 rounded-xl hover:bg-gray-800 transition-colors"
                             >
                                 <MenuIcon />
                             </button>
                             <div className="hidden md:flex flex-col">
-                                <span className="text-[10px] text-gray-400 font-black uppercase tracking-widest">Estilismo & Color</span>
-                                <span className="text-[12px] text-black font-black uppercase tracking-tighter">Vellaperfumeria Store</span>
+                                <span className="text-[10px] text-[#f78df6] font-black uppercase tracking-widest">Estilismo & Color</span>
+                                <span className="text-[12px] text-black font-black uppercase tracking-tighter">Vellaperfumeria.com</span>
                             </div>
                         </div>
 
-                        <div className="absolute left-1/2 transform -translate-x-1/2 cursor-pointer" onClick={() => onNavigate('home')}>
+                        <div className="absolute left-1/2 transform -translate-x-1/2 cursor-pointer" onClick={handleHomeRedirect}>
                              <img 
                                 src="https://i0.wp.com/vellaperfumeria.com/wp-content/uploads/2025/06/1000003724-removebg-preview.png" 
                                 alt="Vellaperfumeria" 
-                                className="h-16 md:h-24 w-auto hover:scale-105 transition-transform duration-500" 
+                                className="h-16 md:h-20 w-auto hover:scale-105 transition-transform duration-500" 
                             />
                         </div>
 
-                        <div className="w-1/3 flex items-center justify-end">
-                            <button onClick={onCartClick} className="relative p-3 bg-black text-white rounded-full hover:bg-gray-800 transition-all shadow-xl group">
+                        <div className="w-1/3 flex items-center justify-end space-x-6">
+                            <button onClick={onCartClick} className="relative p-3.5 bg-black text-white rounded-full hover:bg-gray-800 transition-all shadow-xl hover:shadow-[#f78df6]/20 group">
                                 <CartIcon />
                                 {cartCount > 0 && (
                                     <span className="absolute -top-1 -right-1 bg-[#f78df6] text-black text-[11px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-white animate-pop">
@@ -125,11 +152,11 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
                 </div>
             </div>
 
-            {/* FULL WIDTH BLACK MENU */}
+            {/* Menú Negro de Ancho Completo */}
             <nav className="hidden md:block bg-black w-full border-b border-white/5 relative overflow-visible">
                 <div className="container mx-auto">
-                    <div className="flex justify-center items-center h-16">
-                        <NavLink onClick={() => onNavigate('home')}>Inicio</NavLink>
+                    <div className="flex justify-center items-center h-14">
+                        <NavLink onClick={handleHomeRedirect}>Inicio</NavLink>
                         
                         <div 
                             className="h-full relative group"
@@ -141,42 +168,50 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currency, onCurrencyChange,
                                 <svg className={`w-3.5 h-3.5 ml-2 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7" /></svg>
                             </NavLink>
 
-                            {/* DROPDOWN MENU - VISIBLE ON HOVER */}
-                            <div className={`absolute top-full left-1/2 transform -translate-x-1/2 w-64 bg-black shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-t border-[#f78df6] transition-all duration-300 z-[150] ${isDropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
-                                <ul className="py-4">
+                            {/* Dropdown - Fondo Negro Visible */}
+                            <div className={`absolute top-full left-1/2 transform -translate-x-1/2 w-72 bg-black shadow-[0_30px_60px_rgba(0,0,0,0.8)] border-t-2 border-[#f78df6] transition-all duration-300 z-[150] ${isDropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-4'}`}>
+                                <ul className="py-5">
                                     {categories.map(cat => (
                                         <li key={cat.key}>
                                             <button 
                                                 onClick={() => { onNavigate('products', cat.key); setIsDropdownOpen(false); }}
-                                                className="w-full text-left px-8 py-3.5 text-white hover:bg-white/10 hover:text-[#f78df6] font-black uppercase tracking-widest text-[10px] transition-all"
+                                                className="w-full text-left px-10 py-4 text-white hover:bg-white/5 hover:text-[#f78df6] font-black uppercase tracking-[0.25em] text-[10px] transition-all"
                                             >
                                                 {cat.name}
                                             </button>
                                         </li>
                                     ))}
+                                    <li className="pt-4 border-t border-white/10 mt-2">
+                                        <button 
+                                            onClick={() => onNavigate('ofertas')}
+                                            className="w-full text-left px-10 py-4 text-[#f78df6] hover:bg-[#f78df6]/5 font-black uppercase tracking-[0.25em] text-[10px] transition-all"
+                                        >
+                                            Ver Ofertas
+                                        </button>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
 
-                        <NavLink onClick={() => onNavigate('catalog')}>Catálogo</NavLink>
-                        <NavLink onClick={() => onNavigate('ia')} className="text-[#E0C3FC]">Asistente IA</NavLink>
-                        <NavLink onClick={() => onNavigate('ofertas')} className="text-red-400">Ofertas</NavLink>
-                        <NavLink onClick={() => onNavigate('blog')}>Blog</NavLink>
+                        <NavLink onClick={() => onNavigate('catalog')}>Catálogo Digital</NavLink>
+                        <NavLink onClick={() => onNavigate('ia')} className="text-[#E0C3FC]">Beauty AI</NavLink>
+                        <NavLink onClick={() => onNavigate('ofertas')} className="text-red-400">Ofertas 2026</NavLink>
+                        <NavLink onClick={() => onNavigate('blog')}>Novedades</NavLink>
                     </div>
                 </div>
             </nav>
 
-            {/* Mobile Nav Overlay */}
-            <div className={`md:hidden fixed inset-0 bg-black/95 z-[200] transition-all duration-500 flex flex-col p-12 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-                 <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-8 right-8 text-white">
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            {/* Mobile Nav */}
+            <div className={`md:hidden fixed inset-0 bg-black/98 z-[200] transition-all duration-500 flex flex-col p-12 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                 <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-8 right-8 text-[#f78df6]">
+                    <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                  </button>
-                 <nav className="flex flex-col space-y-8 text-white font-black uppercase tracking-[0.2em] text-xl mt-12">
-                     <button onClick={() => { onNavigate('home'); setIsMobileMenuOpen(false); }}>Inicio</button>
-                     <button onClick={() => { onNavigate('products', 'all'); setIsMobileMenuOpen(false); }}>Tienda</button>
-                     <button onClick={() => { onNavigate('ofertas'); setIsMobileMenuOpen(false); }} className="text-red-400">Ofertas</button>
-                     <button onClick={() => { onNavigate('catalog'); setIsMobileMenuOpen(false); }}>Catálogo</button>
-                     <button onClick={() => { onNavigate('ia'); setIsMobileMenuOpen(false); }}>Asistente IA</button>
+                 <nav className="flex flex-col space-y-10 text-white font-black uppercase tracking-[0.3em] text-2xl mt-20">
+                     <button onClick={handleHomeRedirect} className="text-left border-b border-white/10 pb-4">Inicio</button>
+                     <button onClick={() => { onNavigate('products', 'all'); setIsMobileMenuOpen(false); }} className="text-left border-b border-white/10 pb-4">Tienda</button>
+                     <button onClick={() => { onNavigate('ofertas'); setIsMobileMenuOpen(false); }} className="text-left border-b border-white/10 pb-4 text-red-400">Ofertas</button>
+                     <button onClick={() => { onNavigate('catalog'); setIsMobileMenuOpen(false); }} className="text-left border-b border-white/10 pb-4">Catálogo</button>
+                     <button onClick={() => { onNavigate('ia'); setIsMobileMenuOpen(false); }} className="text-left text-[#E0C3FC]">Beauty AI</button>
                  </nav>
             </div>
         </header>
